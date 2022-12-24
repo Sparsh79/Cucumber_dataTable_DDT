@@ -23,23 +23,21 @@ public class ExcelDataReader implements DataReader {
     private final ReaderConfig config;
     private final Logger logger = LoggerFactory.getLogger(ExcelDataReader.class);
 
+    //get the instance of work book
     public ExcelDataReader(ReaderConfig config) {
         this.config = config;
     }
-    // 1. To get the instance of work book
 
+    //Get the sheet using the work book object
     private XSSFWorkbook getWorkBook() throws InvalidFormatException, IOException {
         return new XSSFWorkbook(new File(config.getFileLocation()));
     }
-
-    // 2. Get the sheet using the work book object
 
     private XSSFSheet getSheet(XSSFWorkbook workBook) {
         return workBook.getSheet(config.getSheetName());
     }
 
-    // 3. To get the header from the excel file
-
+    //To get the header from the excel file
     private List<String> getHeaders(XSSFSheet sheet) {
         List<String> headers = new ArrayList<String>();
         XSSFRow row = sheet.getRow(0);
@@ -123,5 +121,4 @@ public class ExcelDataReader implements DataReader {
             i++;
         }
     }
-
 }

@@ -47,19 +47,16 @@ public class ReaderConfig {
         public ReaderConfigBuilder setFileLocation(String fileLocation) {
             this.fileLocation = fileLocation;
             return this;
-
         }
 
         public ReaderConfigBuilder setSheetName(String sheetName) {
             this.sheetName = sheetName;
             return this;
-
         }
 
         public ReaderConfigBuilder setIndex(int index) {
             this.index = index;
             return this;
-
         }
 
         public ReaderConfig build() {
@@ -68,6 +65,5 @@ public class ReaderConfig {
             Objects.requireNonNull(sheetName);
             return new ReaderConfig(fileName, fileLocation, sheetName, index);
         }
-
     }
 }

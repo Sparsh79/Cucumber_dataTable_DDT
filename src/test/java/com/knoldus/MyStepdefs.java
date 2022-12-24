@@ -1,10 +1,8 @@
 package com.knoldus;
 
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 
-import java.util.List;
 import java.util.Map;
 
 public class MyStepdefs {
