@@ -54,8 +54,8 @@ public class ExcelDataReader implements DataReader {
         try (XSSFWorkbook workBook = getWorkBook()) {
             XSSFSheet sheet = getSheet(workBook);
             data = getData(sheet);
-        } catch (Exception e) {
-            logger.error(e, () -> {
+        } catch (Exception exception) {
+            logger.error(exception, () -> {
                 return String.format("Not able to read the excel %s from location %s", config.getFileName(),
                         config.getFileLocation());
             });
@@ -104,8 +104,8 @@ public class ExcelDataReader implements DataReader {
         try (XSSFWorkbook workBook = getWorkBook()) {
             XSSFSheet sheet = getSheet(workBook);
             data = getData(sheet, config.getIndex());
-        } catch (Exception e) {
-            logger.error(e, () -> {
+        } catch (Exception exception) {
+            logger.error(exception, () -> {
                 return String.format("Not able to read the excel %s from location %s", config.getFileName(),
                         config.getFileLocation());
             });
@@ -115,10 +115,10 @@ public class ExcelDataReader implements DataReader {
     }
 
     private void forEachWithCounter(Iterable<Cell> source, BiConsumer<Integer, Cell> biConsumer) {
-        int i = 0;
+        int iterator = 0;
         for (Cell cell : source) {
-            biConsumer.accept(i, cell);
-            i++;
+            biConsumer.accept(iterator, cell);
+            iterator++;
         }
     }
 }
