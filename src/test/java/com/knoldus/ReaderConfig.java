@@ -8,12 +8,14 @@ public class ReaderConfig {
     private final String fileLocation;
     private final String sheetName;
     private int index = -1;
+    private int columnName = -1;
 
-    private ReaderConfig(String fileName, String fileLocation, String sheetName, int index) {
+    private ReaderConfig(String fileName, String fileLocation, String sheetName, int index, int columnName) {
         this.fileName = fileName;
         this.fileLocation = fileLocation;
         this.sheetName = sheetName;
         this.index = index;
+        this.columnName = columnName;
     }
 
     public String getFileName() {
@@ -32,16 +34,26 @@ public class ReaderConfig {
         return index;
     }
 
+    public int getColumnName() {
+        return columnName;
+    }
+
     public static class ReaderConfigBuilder {
         private String fileName;
         private String fileLocation;
         private String sheetName;
         private int index = -1;
+        private int columnName = -1;
 
         public ReaderConfigBuilder setFileName(String fileName) {
             this.fileName = fileName;
             return this;
 
+        }
+
+        public ReaderConfigBuilder setColumnName(int columnName) {
+            this.columnName = columnName;
+            return this;
         }
 
         public ReaderConfigBuilder setFileLocation(String fileLocation) {
@@ -63,7 +75,8 @@ public class ReaderConfig {
             Objects.requireNonNull(fileName);
             Objects.requireNonNull(fileLocation);
             Objects.requireNonNull(sheetName);
-            return new ReaderConfig(fileName, fileLocation, sheetName, index);
+            Objects.requireNonNull(columnName);
+            return new ReaderConfig(fileName, fileLocation, sheetName, index, columnName);
         }
     }
 }

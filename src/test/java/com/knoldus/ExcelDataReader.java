@@ -5,7 +5,7 @@ import io.cucumber.core.logging.LoggerFactory;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -35,6 +35,10 @@ public class ExcelDataReader implements DataReader {
 
     private XSSFSheet getSheet(XSSFWorkbook workBook) {
         return workBook.getSheet(config.getSheetName());
+    }
+
+    public Cell getColumnIndex(Row row) {
+        return row.getCell(config.getColumnName());
     }
 
     //To get the header from the excel file
@@ -71,7 +75,6 @@ public class ExcelDataReader implements DataReader {
 
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Map<String, String> rowMap = new HashedMap<String, String>();
-            DataFormatter formatter = new DataFormatter();
             XSSFRow row = sheet.getRow(i);
             forEachWithCounter(row, (index, cell) -> {
                 rowMap.put(headers.get(index), cell.getStringCellValue());
@@ -112,6 +115,28 @@ public class ExcelDataReader implements DataReader {
             return Collections.emptyMap();
         }
         return Collections.unmodifiableMap(data);
+    }
+
+    public List<String> getExcelDataWithRespectToColumn() {
+        try (XSSFWorkbook workBook = getWorkBook()) {
+            XSSFSheet sheet = getSheet(workBook);
+            List<String> values = new ArrayList<String>();
+            for (Row r : sheet) {
+                Cell c = getColumnIndex(r);
+                if (c != null) {
+                    if (c.getCellType() == Cell.CELL_TYPE_STRING) {
+                        values.add(c.getStringCellValue());
+                    } else if (c.getCellType() == Cell.CELL_TYPE_FORMULA && c.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC) {
+                        values.add(c.getStringCellValue());
+                    }
+                }
+            }
+            return values;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void forEachWithCounter(Iterable<Cell> source, BiConsumer<Integer, Cell> biConsumer) {
