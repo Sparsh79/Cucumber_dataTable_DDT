@@ -73,9 +73,9 @@ public class ExcelDataReader implements DataReader {
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
         List<String> headers = getHeaders(sheet);
 
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+        for (int iterator = 1; iterator <= sheet.getLastRowNum(); iterator++) {
             Map<String, String> rowMap = new HashedMap<String, String>();
-            XSSFRow row = sheet.getRow(i);
+            XSSFRow row = sheet.getRow(iterator);
             forEachWithCounter(row, (index, cell) -> {
                 rowMap.put(headers.get(index), cell.getStringCellValue());
             });
@@ -87,23 +87,18 @@ public class ExcelDataReader implements DataReader {
     private Map<String, String> getData(XSSFSheet sheet, int rowIndex) {
         List<String> headers = getHeaders(sheet);
         Map<String, String> rowMap = new HashedMap<String, String>();
-
         XSSFRow row = sheet.getRow(rowIndex);
         forEachWithCounter(row, (index, cell) -> {
             rowMap.put(headers.get(index), cell.getStringCellValue());
         });
-
-        forEachWithCounter(row, (i, j) -> {
-
+        forEachWithCounter(row, (iterator, secondIterator) -> {
         });
-
         return Collections.unmodifiableMap(rowMap);
     }
 
     @Override
     public Map<String, String> getASingleRow() {
         Map<String, String> data = new HashedMap<String, String>();
-
         try (XSSFWorkbook workBook = getWorkBook()) {
             XSSFSheet sheet = getSheet(workBook);
             data = getData(sheet, config.getIndex());
@@ -121,13 +116,13 @@ public class ExcelDataReader implements DataReader {
         try (XSSFWorkbook workBook = getWorkBook()) {
             XSSFSheet sheet = getSheet(workBook);
             List<String> values = new ArrayList<String>();
-            for (Row r : sheet) {
-                Cell c = getColumnIndex(r);
-                if (c != null) {
-                    if (c.getCellType() == Cell.CELL_TYPE_STRING) {
-                        values.add(c.getStringCellValue());
-                    } else if (c.getCellType() == Cell.CELL_TYPE_FORMULA && c.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC) {
-                        values.add(c.getStringCellValue());
+            for (Row row : sheet) {
+                Cell cell = getColumnIndex(row);
+                if (cell != null) {
+                    if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                        values.add(cell.getStringCellValue());
+                    } else if (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC) {
+                        values.add(cell.getStringCellValue());
                     }
                 }
             }

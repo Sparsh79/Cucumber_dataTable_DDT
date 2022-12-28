@@ -3,7 +3,6 @@ package com.knoldus;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 
-import java.util.List;
 import java.util.Map;
 
 public class MyStepdefs {
@@ -14,10 +13,6 @@ public class MyStepdefs {
         System.out.println(dataTable.getExcelDataWithRespectToColumn());
 //        System.out.println(dataTable.getASingleRow());
 //        System.out.println(dataTable.getASingleRow());
-
-
-        List<Map<String, String>> abc = dataTable.getAllRows();
-
     }
 
     @DataTableType
@@ -26,8 +21,8 @@ public class MyStepdefs {
                 .setFileName(entry.get("Excel"))
                 .setFileLocation(entry.get("Location"))
                 .setSheetName(entry.get("Sheet"))
-                .setColumnName(Integer.valueOf(entry.getOrDefault("ColumnHeader", "0")))
-                .setIndex(Integer.valueOf(entry.getOrDefault("Index", "0")))
+                .setColumnName(Integer.parseInt(entry.getOrDefault("ColumnHeader", "0")))
+                .setIndex(Integer.parseInt(entry.getOrDefault("Index", "0")))
                 .build();
         return new ExcelDataReader(config);
     }
