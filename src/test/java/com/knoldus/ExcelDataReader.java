@@ -128,11 +128,13 @@ public class ExcelDataReader implements DataReader {
                 }
             }
             return values;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidFormatException e) {
-            throw new RuntimeException(e);
+        } catch (Exception exception) {
+            logger.error(exception, () -> {
+                return String.format("Not able to read the excel %s from location %s", config.getFileName(),
+                        config.getFileLocation());
+            });
         }
+        return Collections.<String>emptyList();
     }
 
     private void forEachWithCounter(Iterable<Cell> source, BiConsumer<Integer, Cell> biConsumer) {
