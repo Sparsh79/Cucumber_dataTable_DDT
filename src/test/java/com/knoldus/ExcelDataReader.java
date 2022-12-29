@@ -120,15 +120,12 @@ public class ExcelDataReader implements DataReader {
             for (Row row : sheet) {
                 Cell cell = getColumnIndex(row);
                 if (cell != null) {
-                    if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
                         values.add(cell.getStringCellValue());
-                    } else if (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC) {
-                        values.add(cell.getStringCellValue());
-                    }
+                    return values;
                 }
             }
-            return values;
-        } catch (Exception exception) {
+        }
+         catch (Exception exception) {
             logger.error(exception, () -> {
                 return String.format("Not able to read the excel %s from location %s", config.getFileName(),
                         config.getFileLocation());
