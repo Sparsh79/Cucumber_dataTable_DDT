@@ -5,6 +5,7 @@ import io.cucumber.core.logging.LoggerFactory;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -120,12 +121,15 @@ public class ExcelDataReader implements DataReader {
             for (Row row : sheet) {
                 Cell cell = getColumnIndex(row);
                 if (cell != null) {
+                    if (cell.getCellType() == CellType.STRING) {
                         values.add(cell.getStringCellValue());
-                    return values;
+                    } else if (cell.getCellType() == CellType.FORMULA && cell.getCachedFormulaResultType() == CellType.NUMERIC) {
+                        values.add(cell.getStringCellValue());
+                    }
                 }
             }
-        }
-         catch (Exception exception) {
+            return values;
+        } catch (Exception exception) {
             logger.error(exception, () -> {
                 return String.format("Not able to read the excel %s from location %s", config.getFileName(),
                         config.getFileLocation());
